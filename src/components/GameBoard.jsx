@@ -6,15 +6,16 @@ const intialGameBoard = [
   [null, null, null],
 ];
 
-export default function GameBoard() {
+export default function GameBoard({ activePlayerSymbol, onSelectSquare }) {
   const [gameBoard, setGameBoard] = useState(intialGameBoard);
 
   function handleCellClick(rowIndex, cellIndex) {
     setGameBoard((gameBoard) => {
       const updatedGameBoard = [...gameBoard.map((row) => [...row])];
-      updatedGameBoard[rowIndex][cellIndex] = 'X';
+      updatedGameBoard[rowIndex][cellIndex] = activePlayerSymbol;
       return updatedGameBoard;
     });
+    onSelectSquare();
   }
 
   return (
