@@ -10,15 +10,11 @@ function deriveActivePlayer(turns) {
 }
 
 function App() {
-  // const [activePlayer, setActivePlayer] = useState('X');
   const [gameTurns, setGameTurns] = useState([]);
 
   const activePlayer = deriveActivePlayer(gameTurns);
 
   function handleSelectSquare(rowIndex, cellIndex) {
-    // setActivePlayer((activePlayer) => {
-    //   return activePlayer === 'X' ? 'O' : 'X';
-    // });
     setGameTurns((prevTurns) => {
       let currentPlayer = deriveActivePlayer(prevTurns);
 
