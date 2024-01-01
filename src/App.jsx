@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Player from './components/Player';
 import GameBoard from './components/GameBoard';
 import Log from './components/Log';
+import GameOver from './components/GameOver';
 
 import { WINNING_COMBINATIONS } from './winning-combinations';
 
@@ -52,6 +53,8 @@ function App() {
     }
   }
 
+  const hasDraw = gameTurns.length === 9 && !winner;
+
   /**
    * Handles the selection of a square on the game board.
    * @param {number} rowIndex - The index of the row where the square is located.
@@ -71,6 +74,10 @@ function App() {
     });
   }
 
+  function handleRestart() {
+    setGameTurns([]);
+  }
+
   return (
     <main>
       <div id="game-container">
@@ -86,7 +93,9 @@ function App() {
             isActive={activePlayer === 'O'}
           />
         </ol>
-        {winner && <p>{`Player ${winner} won!`}</p>}
+        {(winner || hasDraw) && (
+          <GameOver winner={winner} onRestart={handleRestart} />
+        )}
         <GameBoard
           onSelectSquare={handleSelectSquare}
           activePlayerSymbol={activePlayer}
