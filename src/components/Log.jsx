@@ -1,7 +1,13 @@
-export default function Log() {
+export default function Log({ turns }) {
   return (
     <ol id="log">
-      <li>Log item 1</li>
+      {turns.map((turn, index) => {
+        return (
+          <li
+            key={index}
+          >{`Player ${turn.player} played at row ${turn.position[0]} and column ${turn.position[1]}`}</li>
+        );
+      })}
     </ol>
   );
 }
