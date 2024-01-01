@@ -20,17 +20,17 @@ export default function GameBoard({
   //     onSelectSquare();
   //   }
 
-  //   const gameBoard = turns.reduce((gameBoard, turn) => {
-  //     const updatedGameBoard = [...gameBoard.map((row) => [...row])];
-  //     updatedGameBoard[turn.position[0]][turn.position[1]] = turn.player;
-  //     return updatedGameBoard;
-  //   }, intialGameBoard);
+  const gameBoard = turns.reduce((gameBoard, turn) => {
+    const updatedGameBoard = [...gameBoard.map((row) => [...row])];
+    updatedGameBoard[turn.position[0]][turn.position[1]] = turn.player;
+    return updatedGameBoard;
+  }, intialGameBoard);
 
-  let gameBoard = intialGameBoard;
+  //   let gameBoard = intialGameBoard;
 
-  for (let turn of turns) {
-    gameBoard[turn.position[0]][turn.position[1]] = turn.player;
-  }
+  //   for (let turn of turns) {
+  //     gameBoard[turn.position[0]][turn.position[1]] = turn.player;
+  //   }
 
   return (
     <ol id="game-board">
@@ -41,7 +41,10 @@ export default function GameBoard({
               {row.map((cell, cellIndex) => {
                 return (
                   <li key={`${rowIndex}-${cellIndex}`}>
-                    <button onClick={() => onSelectSquare(rowIndex, cellIndex)}>
+                    <button
+                      onClick={() => onSelectSquare(rowIndex, cellIndex)}
+                      disabled={cell !== null}
+                    >
                       {cell}
                     </button>
                   </li>
