@@ -7,11 +7,16 @@ import GameOver from './components/GameOver';
 
 import { WINNING_COMBINATIONS } from './winning-combinations';
 
-const intialGameBoard = [
+const INITIAL_GAME_BOARD = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
+
+const INITIAL_PLAYERS = {
+  X: 'Player 1',
+  O: 'Player 2',
+};
 
 /**
  * Derives the active player based on the turns array.
@@ -23,25 +28,13 @@ function deriveActivePlayer(turns) {
   return lastTurn ? (lastTurn.player === 'X' ? 'O' : 'X') : 'X';
 }
 
-function App() {
-  const [gameTurns, setGameTurns] = useState([]);
-  const [players, setPlayers] = useState({
-    X: 'Player 1',
-    O: 'Player 2',
-  });
-
-  const activePlayer = deriveActivePlayer(gameTurns);
-
-  /**
-   * Represents the game board with the current state of the game.
-   * @type {Array<Array<string|null>>}
-   */
-  const gameBoard = gameTurns.reduce((gameBoard, turn) => {
-    const updatedGameBoard = [...gameBoard.map((row) => [...row])];
-    updatedGameBoard[turn.position[0]][turn.position[1]] = turn.player;
-    return updatedGameBoard;
-  }, intialGameBoard);
-
+/**
+ * Determines the winner of the tic-tac-toe game based on the current game board.
+ * @param {Array<Array<string|null>>} gameBoard - The current game board represented as a 2D array.
+ * @param {Array<string>} players - An array of player names.
+ * @returns {string|null} - The name of the winning player or null if there is no winner.
+ */
+function deriveWinner(gameBoard, players) {
   let winner;
 
   for (let i = 0; i < WINNING_COMBINATIONS.length; i++) {
@@ -57,6 +50,31 @@ function App() {
     }
   }
 
+  return winner;
+}
+
+/**
+ * Derives the game board based on the given game turns.
+ * @param {Array} gameTurns - The array of game turns.
+ * @returns {Array} - The derived game board.
+ */
+function deriveGameboard(gameTurns) {
+  const gameBoard = gameTurns.reduce((gameBoard, turn) => {
+    const updatedGameBoard = [...gameBoard.map((row) => [...row])];
+    updatedGameBoard[turn.position[0]][turn.position[1]] = turn.player;
+    return updatedGameBoard;
+  }, INITIAL_GAME_BOARD);
+
+  return gameBoard;
+}
+
+function App() {
+  const [gameTurns, setGameTurns] = useState([]);
+  const [players, setPlayers] = useState(INITIAL_PLAYERS);
+
+  const activePlayer = deriveActivePlayer(gameTurns);
+  const gameBoard = deriveGameboard(gameTurns);
+  const winner = deriveWinner(gameBoard, players);
   const hasDraw = gameTurns.length === 9 && !winner;
 
   /**
@@ -96,13 +114,13 @@ function App() {
       <div id="game-container">
         <ol id="players" className="highlight-player">
           <Player
-            initialName="Player 1"
+            initialName={INITIAL_PLAYERS.X}
             symbol="X"
             isActive={activePlayer === 'X'}
             onChangeName={handlePlayerNameChange}
           />
           <Player
-            initialName="Player 2"
+            initialName={INITIAL_PLAYERS.O}
             symbol="O"
             isActive={activePlayer === 'O'}
             onChangeName={handlePlayerNameChange}
